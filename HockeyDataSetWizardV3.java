@@ -215,13 +215,11 @@ class Skaters extends HockeyPlayer implements Comparable<Skaters>{
 		skatersRoster = new ArrayList<Skaters>();
 	}
 	
-	public Skaters(int sortSkatersBy){
+	public Skaters(int sortSkatersBy, ArrayList<Skaters> f, ArrayList<Skaters> d){
 		super(" ", " ", " ");
 		skatersRoster = new ArrayList<Skaters>();
 		this.sortSkatersBy = sortSkatersBy;
-		Forward f = new Forward();
-		Defense d = new Defense();
-		setSkatersRoster(f.getForwardRoster(), d.getDefenseRoster());
+		setSkatersRoster(f, d);
 		setSkatersSorted();
 	}
 	
@@ -249,20 +247,12 @@ class Skaters extends HockeyPlayer implements Comparable<Skaters>{
 	
 	/**
 	* a method that defines how to sort Skaters numerically by a stat
-	* @param Player the player to which we are comparing
+	* @param Skater the skater to which we are comparing
 	*/
 	@Override
     	public int compareTo(Skaters other) {
     	switch(sortSkatersBy){
     	case 1:
-    		if (this.getPoints() < other.getPoints()) {
-    			return -1;
-    		}
-    		if (this.getPoints() == other.getPoints()) { 
-    			return 0;
-    		}
-    		break;
-   	case 2:
     		if (this.getGoals() < other.getGoals()) {
     			return -1;
     		}
@@ -270,11 +260,19 @@ class Skaters extends HockeyPlayer implements Comparable<Skaters>{
     			return 0;
     		}
     		break;
-    	case 3:
+   	case 2:
     		if (this.getAssists() < other.getAssists()) {
     			return -1;
     		}
     		if (this.getAssists() == other.getAssists()) { 
+    			return 0;
+    		}
+    		break;
+    	case 3:
+    		if (this.getPoints() < other.getPoints()) {
+    			return -1;
+    		}
+    		if (this.getPoints() == other.getPoints()) { 
     			return 0;
     		}
     		break;
@@ -675,7 +673,9 @@ class Sort{
 						ArrayList<String> gapp = sortOptions("Goals", "Assists", "Points", "+/-");
 						System.out.print("Enter selection:  ");
 						int userSkaterStatSelection = Integer.parseInt(reader.readLine());
-						Skaters sk = new Skaters(userSkaterStatSelection);
+						Forward f = new Forward();
+						Defense d = new Defense();
+						Skaters sk = new Skaters(userSkaterStatSelection, f.getForwardRoster(), d.getDefenseRoster());
 						int rosterMinS = 1;
 						int rosterMaxS = 1;
 						switch(userSkaterStatSelection){
